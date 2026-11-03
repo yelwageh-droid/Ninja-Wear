@@ -13,7 +13,7 @@ function catalogError(error) {
 
 function getSupabase() {
   if (!supabaseRequest) {
-    if (!import.meta.env.SUPABASE_API_URL || !import.meta.env.SUPABASE_API_KEY) {
+    if (!import.meta.env.VITE_SUPABASE_API_URL || !import.meta.env.VITE_SUPABASE_API_KEY) {
       return Promise.reject(new Error(clientNotInitializedError));
     }
 

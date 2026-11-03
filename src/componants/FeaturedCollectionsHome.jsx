@@ -47,7 +47,6 @@ const FeaturesCollectionsSection = () => {
             const { data, error: queryError } = await getCollections();
 
             if (queryError) {
-                console.error("Could not load featured collections:", queryError.message);
                 if (!cancelled) {
                     setError('collections.noFolders');
                     setLoading(false);
@@ -64,7 +63,6 @@ const FeaturesCollectionsSection = () => {
                 const { data, error } = await getCollectionSkins(collection.name);
 
                 if (error) {
-                    console.error(`Could not load ${collection.name} images:`, error.message);
                     return [collection.name, null];
                 }
 
@@ -93,7 +91,7 @@ const FeaturesCollectionsSection = () => {
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div className="space-y-3">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-wide uppercase">
-                CHOOSE YOUR <span className="text-gray-500">STYLE</span>
+                {t('home.collectionsHeading')}
                 </h2>
                 <p className="text-gray-400 text-sm md:text-base max-w-xl">
                 {collections.length

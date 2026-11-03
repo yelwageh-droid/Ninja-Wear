@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import Nav from './componants/NavBar.jsx'
 import { LayoutGroup, LazyMotion, MotionConfig, domMax, m } from 'framer-motion';
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, Link } from 'react-router-dom'
 import './App.css'
 import Footer from './componants/Footer.jsx';
 import { LanguageProvider } from './context/LanguageContext.jsx';
@@ -20,14 +20,26 @@ const OrdersManager = lazy(() => import('./pages/admin/OrdersManager.jsx'));
 const LaptopsManager = lazy(() => import('./pages/admin/LaptopsManager.jsx'));
 const CollectionsManager = lazy(() => import('./pages/admin/CollectionsManager.jsx'));
 
-
-function Page({ title }) {
+// Styled 404 page — uses t() safely inside the LanguageProvider tree / صفحة 404 بتستخدم t() داخل مزوّد اللغة
+function NotFound() {
   const { t } = useLanguage();
   return (
-    <main className="mx-auto max-w-6xl px-6 py-12 text-white">
-      <h1 className="text-3xl font-semibold">{title === 'Page not found' ? t('notFound') : title}</h1>
+    <main className="flex min-h-[75vh] flex-col items-center justify-center px-6 py-24 text-center">
+      <p className="mb-4 text-8xl font-extrabold text-white/10 select-none">404</p>
+      <h1 className="mb-3 text-3xl font-bold text-white">{t('notFound')}</h1>
+      <p className="mb-10 max-w-xs text-sm leading-relaxed text-gray-500">
+        {t('notFoundDescription')}
+      </p>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Link to="/" className="rounded-lg bg-white px-5 py-3 text-sm font-bold text-black transition hover:bg-gray-200">
+          {t('nav.home')}
+        </Link>
+        <Link to="/collections" className="rounded-lg border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/40">
+          {t('nav.collections')}
+        </Link>
+      </div>
     </main>
-  )
+  );
 }
 
 function App() {
@@ -66,7 +78,7 @@ function App() {
                     <Route path="/custom" element={<Custom />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/contact-us" element={<ContactUs />} />
-                    <Route path="*" element={<Page title="Page not found" />} />
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </Suspense>
               </m.div>

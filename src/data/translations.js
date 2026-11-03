@@ -13,7 +13,7 @@ export const translations = {
       defenseTitle: 'EVERYDAY PROTECTION', defenseDescription: 'Helps guard against scratches, fingerprints and daily wear without adding noticeable bulk.',
       removalTitle: 'CLEAN REMOVAL', removalDescription: 'Premium adhesive lets you refresh your style without leaving sticky residue behind.',
       printTitle: 'VIVID PRINT', printDescription: 'Rich, detailed artwork with lasting color, so your design stays sharp and full of life.',
-      collectionsTitle: 'FIND YOUR STYLE', collectionsDescription: 'Explore our designs: {names}.', collectionsDescriptionFallback: 'Explore designs made for your laptop.', viewAllCollections: 'View all collections',
+      collectionsTitle: 'FIND YOUR STYLE', collectionsHeading: 'CHOOSE YOUR STYLE', collectionsDescription: 'Explore our designs: {names}.', collectionsDescriptionFallback: 'Explore designs made for your laptop.', viewAllCollections: 'View all collections',
       applicationTitle: 'A GREAT FIT, MADE SIMPLE', applicationDescription: 'Take your time, line up the edges, and smooth the skin onto a clean surface for a polished finish.',
       stepOneTitle: 'CLEAN THE SURFACE', stepOneDescription: 'Wipe away dust and oils with a clean microfiber cloth before you begin.',
       stepTwoTitle: 'LINE IT UP', stepTwoDescription: 'Peel back a small section and align the skin with your laptop edges and logo.',
@@ -65,6 +65,7 @@ export const translations = {
       helpTitle: 'Need help choosing?', helpDescription: 'Tell us your laptop model or the look you have in mind. We’ll help you find the right fit.', talkToTeam: 'Talk to our team', tagline: 'Laptop skins, made personal.',
     },
     notFound: 'This page is not available.',
+    notFoundDescription: 'The page you were looking for doesn\'t exist or may have been moved.',
   },
   ar: {
     nav: {
@@ -80,7 +81,7 @@ export const translations = {
       defenseTitle: 'حماية للاستخدام اليومي', defenseDescription: 'يساعد على تقليل آثار الخدوش والبصمات والاستخدام اليومي، من غير سُمك مزعج.',
       removalTitle: 'يتشال من غير أثر', removalDescription: 'خامة لاصقة بجودة عالية تقدر تغيّرها وقت ما تحب من غير بقايا لزجة على الجهاز.',
       printTitle: 'ألوان وتفاصيل واضحة', printDescription: 'طباعة غنية بالتفاصيل وألوان ثابتة تخلي التصميم محتفظ بحضوره مع الوقت.',
-      collectionsTitle: 'اختار الستايل اللي شبهك', collectionsDescription: 'لفّ على مجموعاتنا: {names}.', collectionsDescriptionFallback: 'اكتشف تصميمات معمولة علشان تليق على اللابتوب بتاعك.', viewAllCollections: 'شوف كل التصميمات',
+      collectionsTitle: 'اختار الستايل اللي شبهك', collectionsHeading: 'اختار ستايلك', collectionsDescription: 'لفّ على مجموعاتنا: {names}.', collectionsDescriptionFallback: 'اكتشف تصميمات معمولة علشان تليق على اللابتوب بتاعك.', viewAllCollections: 'شوف كل التصميمات',
       applicationTitle: 'تركيب سهل ونتيجة تفرق', applicationDescription: 'نضّف السطح، ظبّط الحواف، وركّب السكن بهدوء علشان تطلع النتيجة مظبوطة.',
       stepOneTitle: 'نضّف السطح', stepOneDescription: 'امسح التراب وآثار الدهون بقطعة مايكروفايبر قبل ما تبدأ.',
       stepTwoTitle: 'ظبّط الحواف', stepTwoDescription: 'اكشف جزء صغير من اللاصق، ووازن السكن مع أطراف الجهاز ومكان الشعار.',
@@ -132,5 +133,6 @@ export const translations = {
       helpTitle: 'محتار تختار؟', helpDescription: 'قولنا موديل اللابتوب أو الشكل اللي في بالك، وفريقنا هيساعدك تلاقي الاختيار المناسب.', talkToTeam: 'كلم فريقنا', tagline: 'سكن لابتوب على ذوقك.',
     },
     notFound: 'الصفحة دي مش متاحة.',
+    notFoundDescription: 'الصفحة اللي بتدور عليها مش موجودة أو اتنقلت.',
   },
 };
