@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { translations } from '../data/translations.js';
 
 const LanguageContext = createContext(null);
-const languageStorageKey = 'ninja-skins-language';
+const languageStorageKey = 'ninja-wear-language';
 
 function readLanguage() {
   try {
@@ -23,21 +23,23 @@ export function LanguageProvider({ children }) {
   const location = useLocation();
   const isAdminRoute = location.pathname === '/admin' || location.pathname.startsWith('/admin/');
   const [language, setLanguage] = useState(readLanguage);
+  // The admin workspace is English-only, so both copy and direction must agree there.
+  // لوحة الإدارة بالإنجليزية فقط، لذا يجب أن يتطابق النص مع اتجاه المستند
+  const activeLanguage = isAdminRoute ? 'en' : language;
   const toggleLanguage = () => setLanguage((current) => (current === 'en' ? 'ar' : 'en'));
   const t = (key, values = {}) => Object.entries(values).reduce(
     (message, [name, value]) => message.replaceAll(`{${name}}`, String(value)),
-    String(getTranslation(language, key)),
+    String(getTranslation(activeLanguage, key)),
   );
-  const formatCurrency = (amount) => new Intl.NumberFormat(language === 'ar' ? 'ar-EG' : 'en-EG', {
+  const formatCurrency = (amount) => new Intl.NumberFormat(activeLanguage === 'ar' ? 'ar-EG' : 'en-EG', {
     style: 'currency',
     currency: 'EGP',
     maximumFractionDigits: 0,
   }).format(Number(amount || 0));
-  const formatNumber = (amount) => new Intl.NumberFormat(language === 'ar' ? 'ar-EG' : 'en-EG').format(Number(amount || 0));
+  const formatNumber = (amount) => new Intl.NumberFormat(activeLanguage === 'ar' ? 'ar-EG' : 'en-EG').format(Number(amount || 0));
 
   // Keep the document language and direction in sync with the toggle / مزامنة لغة المستند واتجاهه مع زر التبديل
   useEffect(() => {
-    const activeLanguage = isAdminRoute ? 'en' : language;
     document.documentElement.dir = activeLanguage === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = activeLanguage;
     try {
@@ -45,10 +47,10 @@ export function LanguageProvider({ children }) {
     } catch {
       // The language toggle still works for the current page if storage is unavailable / يظل التبديل فعالاً للصفحة الحالية إذا تعذر التخزين
     }
-  }, [isAdminRoute, language]);
+  }, [activeLanguage, isAdminRoute, language]);
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, t, formatCurrency, formatNumber }}>
+    <LanguageContext.Provider value={{ language: activeLanguage, toggleLanguage, t, formatCurrency, formatNumber }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -1,61 +1,49 @@
-const dayInMilliseconds = 24 * 60 * 60 * 1000;
+// Shared order-group helpers used by the storefront account page and the admin board.
+// دوال مساعدة لحالة مجموعة الطلبات تُستخدم في صفحة الحساب ولوحة الإدارة.
 
-function orderIdentifier(order) {
-  return order.id ?? order.order_id;
+export const ORDER_STATUS_SEQUENCE = ['Pending', 'Confirmed', 'Printing', 'Shipped', 'Completed'];
+
+export const ORDER_STATUSES = [...ORDER_STATUS_SEQUENCE, 'Cancelled'];
+
+// One status for a whole cart group, or 'Mixed' when its rows disagree
+// حالة واحدة لكل مجموعة، أو 'Mixed' لو الحالات مختلفة
+export function computeOrderGroupStatus(orders = []) {
+  const statuses = [...new Set(orders.map((order) => order.status).filter(Boolean))];
+  if (!statuses.length) return 'Pending';
+  if (statuses.length === 1) return statuses[0];
+  return 'Mixed';
 }
 
-function customerKey(order) {
-  const identity = [order.customer_name, order.customer_email, order.customer_phone]
-    .map((value) => String(value || '').trim().toLowerCase());
-  return identity.every(Boolean) ? identity.join('|') : '';
+export function orderGroupTimestamp(order) {
+  const value = order?.created_at || order?.createdAt;
+  return new Date(value || 0).getTime() || 0;
 }
 
-function orderTimestamp(order) {
-  const timestamp = Date.parse(order.created_at || order.createdAt || '');
-  return Number.isFinite(timestamp) ? timestamp : null;
-}
+// Group raw order rows into cart groups, newest first / تجميع صفوف الطلبات في مجموعات مرتبة
+export function groupOrders(orders = []) {
+  const groups = new Map();
 
-// Group one checkout's rows and safely merge legacy rows from the same customer within 24 hours / تجميع عناصر الشراء الواحد ودمج الصفوف القديمة المتطابقة خلال 24 ساعة
-export function groupOrders(orders) {
-  const groups = [];
-
-  for (const order of orders) {
-    const timestamp = orderTimestamp(order);
-    const groupKey = order.cart_group_id
-      ? `cart:${order.cart_group_id}`
-      : customerKey(order);
-    const matchingGroup = [...groups].reverse().find((group) => {
-      if (order.cart_group_id || group.cartGroupId) {
-        return Boolean(order.cart_group_id && group.cartGroupId === order.cart_group_id);
-      }
-      if (!groupKey || group.key !== groupKey || timestamp === null || group.latestTimestamp === null) return false;
-      return Math.abs(group.latestTimestamp - timestamp) <= dayInMilliseconds;
-    });
-
-    if (matchingGroup) {
-      matchingGroup.orders.push(order);
-      if (timestamp !== null && (matchingGroup.latestTimestamp === null || timestamp > matchingGroup.latestTimestamp)) {
-        matchingGroup.latestTimestamp = timestamp;
-      }
-    } else {
-      groups.push({
-        id: order.cart_group_id || String(orderIdentifier(order) ?? `group-${groups.length}`),
-        cartGroupId: order.cart_group_id || null,
-        key: order.cart_group_id ? groupKey : customerKey(order),
-        latestTimestamp: timestamp,
-        orders: [order],
-      });
+  orders.forEach((order) => {
+    const key = order.cart_group_id || order.id;
+    if (!groups.has(key)) {
+      groups.set(key, { id: key, cartGroupId: order.cart_group_id || null, orders: [], latestTimestamp: 0, totalPrice: 0 });
     }
-  }
-
-  return groups.map((group) => {
-    const statuses = [...new Set(group.orders.map((order) => order.status).filter(Boolean))];
-    return {
-      ...group,
-      primaryOrder: group.orders[0],
-      itemCount: group.orders.length,
-      totalPrice: group.orders.reduce((total, order) => total + Number(order.total_price || 0), 0),
-      status: statuses.length === 1 ? statuses[0] : statuses.length ? 'Mixed' : 'Unknown',
-    };
+    const group = groups.get(key);
+    group.orders.push(order);
+    group.latestTimestamp = Math.max(group.latestTimestamp, orderGroupTimestamp(order));
+    group.totalPrice += Number(order.total_price || 0);
   });
+
+  return Array.from(groups.values())
+    .sort((a, b) => b.latestTimestamp - a.latestTimestamp)
+    .map((group) => {
+      const sorted = [...group.orders].sort((a, b) => orderGroupTimestamp(a) - orderGroupTimestamp(b));
+      return {
+        ...group,
+        orders: sorted,
+        itemCount: sorted.length,
+        status: computeOrderGroupStatus(sorted),
+        primaryOrder: sorted[0],
+      };
+    });
 }

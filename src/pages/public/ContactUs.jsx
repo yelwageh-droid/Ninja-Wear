@@ -13,7 +13,7 @@ export default function ContactUs() {
   const { language, t, formatNumber } = useLanguage();
   const [form, setForm] = useState({ name: '', email: '', topic: 'compatibility', message: '' });
   const [notice, setNotice] = useState('');
-  const whatsappReady = Boolean(getWhatsAppUrl('Hello Ninja Skins'));
+  const whatsappReady = Boolean(getWhatsAppUrl('Hello Ninja Wear'));
 
   const handleChange = (event) => {
     setForm((current) => ({ ...current, [event.target.name]: event.target.value }));
@@ -64,7 +64,7 @@ export default function ContactUs() {
               ))}
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/laptops" className="rounded-md border border-white/15 px-4 py-3 text-sm font-semibold transition hover:border-white/40">{t('contact.browseLaptops')}</Link>
+              <Link to="/apparel" className="rounded-md border border-white/15 px-4 py-3 text-sm font-semibold transition hover:border-white/40">{t('contact.browseApparel')}</Link>
               <Link to="/collections" className="rounded-md border border-white/15 px-4 py-3 text-sm font-semibold transition hover:border-white/40">{t('contact.exploreCollections')}</Link>
             </div>
           </section>

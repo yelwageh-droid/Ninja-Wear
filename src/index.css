@@ -1,5 +1,46 @@
 @import "tailwindcss";
 
+/* Ninja Wear design tokens / توكنز التصميم الموحّدة */
+@theme {
+    --color-obsidian: #0A0A0A;
+    --color-surface: #121214;
+    --color-surface-elevated: #18181B;
+    --color-border-subtle: #222226;
+    --color-brand: #FF5A36;
+    --color-brand-hover: #E04826;
+
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Archivo Black', 'Plus Jakarta Sans', sans-serif;
+}
+
+@layer base {
+    html {
+        font-family: var(--font-sans);
+    }
+
+    /* Streetwear display headings / عناوين العرض بخط الستريت وير */
+    h1,
+    h2 {
+        font-family: var(--font-display);
+    }
+
+    /* Arabic (RTL) renders entirely in Cairo with tuned line-heights / الواجهة العربية بخط Cairo */
+    html[dir="rtl"] body,
+    html[dir="rtl"] h1,
+    html[dir="rtl"] h2 {
+        font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    html[dir="rtl"] body {
+        line-height: 1.6;
+    }
+
+    html[dir="rtl"] h1,
+    html[dir="rtl"] h2 {
+        line-height: 1.25;
+    }
+}
+
 .hero-ambient {
     background:
         radial-gradient(ellipse at 72% 42%, rgba(127, 29, 29, 0.2), transparent 38%),
@@ -15,32 +56,6 @@
     transform-origin: bottom;
     mask-image: radial-gradient(ellipse at 50% 100%, #000 0%, transparent 72%);
     -webkit-mask-image: radial-gradient(ellipse at 50% 100%, #000 0%, transparent 72%);
-}
-
-.floating-laptop-front {
-    animation: floatFront 6s ease-in-out infinite;
-}
-
-.floating-laptop-back {
-    animation: floatBack 7s ease-in-out infinite reverse;
-}
-
-@keyframes floatFront {
-    0%, 100% {
-        transform: translateY(0px) rotate(-2deg);
-    }
-    50% {
-        transform: translateY(-20px) rotate(0deg) scale(1.02);
-    }
-}
-
-@keyframes floatBack {
-    0%, 100% {
-        transform: translateY(0px) rotate(5deg) scale(0.95);
-    }
-    50% {
-        transform: translateY(-15px) rotate(3deg) scale(0.97);
-    }
 }
 
 .fire-spark {
@@ -65,8 +80,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .floating-laptop-front,
-    .floating-laptop-back,
     .fire-spark {
         animation: none;
     }

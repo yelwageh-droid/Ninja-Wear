@@ -1,4 +1,4 @@
-const cartStorageKey = 'ninja-skins-cart';
+const cartStorageKey = 'ninja_wear_cart_v1';
 
 export function readCart() {
   try {
@@ -10,32 +10,28 @@ export function readCart() {
       };
     }
 
-    const legacyDraft = JSON.parse(
-      window.localStorage.getItem('ninja-skins-cart-draft')
-      || window.localStorage.getItem('ninja-skins-custom-draft')
-      || 'null',
-    );
-    if (legacyDraft?.laptopId) {
-      return {
-        items: [{
-          ...legacyDraft,
-          id: createCartItemId(),
-          skinDesign: legacyDraft.customArtwork?.name || legacyDraft.fileName || 'Selected design',
-          coverageType: legacyDraft.coverageId || 'top',
-          totalPrice: legacyDraft.estimatedTotal || 0,
-        }],
-        customer: {},
-      };
-    }
-
     return { items: [], customer: {} };
   } catch {
     return { items: [], customer: {} };
   }
 }
 
+export const cartChangeEvent = 'ninja-wear-cart-change';
+
+function notifyCartChange() {
+  // Storage events do not fire in the tab that made the change, so notify local listeners too.
+  // أحداث التخزين لا تُطلق في نفس التاب الذي قام بالتعديل، لذا نُخطر المستمعين المحليين أيضاً.
+  window.dispatchEvent(new Event(cartChangeEvent));
+}
+
 export function writeCart(cart) {
   window.localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+  notifyCartChange();
+}
+
+export function clearCart() {
+  window.localStorage.removeItem(cartStorageKey);
+  notifyCartChange();
 }
 
 export function createCartItemId() {

@@ -4,6 +4,7 @@ import FeaturedCollectionsSection from "../../componants/FeaturedCollectionsHome
 import { Link } from "react-router-dom";
 import { m } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext.jsx";
+
 const Home = () => {
   const { t } = useLanguage();
   return (
@@ -65,7 +66,6 @@ const Home = () => {
               </div>
 
               <div className="mt-16 text-center">
-                {/* Use a standard link for this CTA / استخدام رابط عادي لزر الدعوة للإجراء */}
                 <Link to="/contact-us" className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 text-white font-medium text-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />

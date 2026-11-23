@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { m } from "framer-motion";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getCollections, getCollectionSkins } from "../data/catalog.js";
+import { getDesignCollections, getCollectionDesigns } from "../services/apparelService.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 
 const CollectionCard = ({ collection, images, onClick }) => {
@@ -16,15 +16,15 @@ const CollectionCard = ({ collection, images, onClick }) => {
             className="group block relative rounded-2xl bg-[#0e0e11] border border-white/5 hover:border-red-500/50 transition-all duration-500 overflow-hidden text-start"
     >
             <div className="aspect-4/3 bg-linear-to-b from-white/2 to-transparent relative overflow-hidden flex items-center justify-center">
-                {images?.[collection.name] ? (
-                    <img src={images[collection.name]} alt={`${collection.displayName || collection.name} skin`} className="h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" />
+                {images?.[collection.collection_name] ? (
+                    <img src={images[collection.collection_name]} alt={`${collection.display_name || collection.collection_name} design`} className="h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" />
                 ) : (
                     <span className="text-gray-500 text-sm">{images ? t('collections.imageUnavailable') : t('collections.imageLoading')}</span>
                 )}
                 
             </div>
             <div className="p-6 border-t border-white/5">
-                <h3 className="text-lg font-bold text-white uppercase tracking-wide mb-1">{collection.displayName || collection.name}</h3>
+                <h3 className="text-lg font-bold text-white uppercase tracking-wide mb-1">{collection.display_name || collection.collection_name}</h3>
                 <p className="text-gray-500 text-sm">{collection.description || t('collections.defaultDescription')}</p>
             </div>
             <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-gray-400 to-transparent scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
@@ -44,7 +44,7 @@ const FeaturesCollectionsSection = () => {
         let cancelled = false;
 
         const loadFeaturedCollections = async () => {
-            const { data, error: queryError } = await getCollections();
+            const { data, error: queryError } = await getDesignCollections();
 
             if (queryError) {
                 if (!cancelled) {
@@ -59,16 +59,16 @@ const FeaturesCollectionsSection = () => {
             if (!cancelled) setCollections(featuredCollections);
 
             const results = await Promise.all(featuredCollections.map(async (collection) => {
-                // Change "skins" here if your Supabase Storage bucket has a different name.
-                const { data, error } = await getCollectionSkins(collection.name);
+                // Design artwork lives in the "designs" bucket folders / تصميمات المجموعة موجودة في مجلدات bucket التصميمات
+                const { data, error } = await getCollectionDesigns(collection.collection_name);
 
                 if (error) {
-                    return [collection.name, null];
+                    return [collection.collection_name, null];
                 }
 
                 const firstImage = data?.[0];
-                if (!firstImage) return [collection.name, null];
-                return [collection.name, firstImage.image];
+                if (!firstImage) return [collection.collection_name, null];
+                return [collection.collection_name, firstImage.image];
             }));
 
             if (!cancelled) {
@@ -95,7 +95,7 @@ const FeaturesCollectionsSection = () => {
                 </h2>
                 <p className="text-gray-400 text-sm md:text-base max-w-xl">
                 {collections.length
-                    ? t('home.collectionsDescription', { names: collections.map((collection) => collection.displayName || collection.name).join(language === 'ar' ? '، ' : ', ') })
+                    ? t('home.collectionsDescription', { names: collections.map((collection) => collection.display_name || collection.collection_name).join(language === 'ar' ? '، ' : ', ') })
                     : t('home.collectionsDescriptionFallback')}
                 </p>
             </div>
@@ -122,10 +122,10 @@ const FeaturesCollectionsSection = () => {
                 >
                     {collections.map((collection) => (
                         <CollectionCard
-                            key={collection.name}
+                            key={collection.collection_name}
                             collection={collection}
                             images={images}
-                            onClick={(selected) => navigate("/collections", { state: { collectionName: selected.name } })}
+                            onClick={(selected) => navigate("/collections", { state: { collectionName: selected.collection_name } })}
                         />
                     ))}
                 </m.div>

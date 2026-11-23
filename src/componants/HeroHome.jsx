@@ -1,8 +1,6 @@
 import { m } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext.jsx";
-import backLaptop from "../assets/Godzilla-removebg-preview.png";
-import frontLaptop from "../assets/laptop-removebg-preview.png";
 
 const sparks = [
   { left: "12%", delay: "0s", duration: "5s" },
@@ -56,7 +54,7 @@ const Hero = () => {
           </Link>
 
           <Link to="/custom" className="w-full max-w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-center font-medium text-white transition-all duration-200 hover:border-white/20 hover:bg-white/10 sm:w-auto">
-            {t('home.buildSkin')}
+            {t('home.buildPiece')}
           </Link>
         </m.div>
       </m.div>
@@ -84,17 +82,19 @@ const Hero = () => {
           ))}
         </div>
 
-        <div className="relative z-10 h-full w-full">
-          <img
-            src={frontLaptop}
-            alt={t('home.heroFrontAlt')}
-            className="floating-laptop-back absolute inset-e-[2%] top-[2%] z-10 h-auto w-[62%] object-contain drop-shadow-[0_24px_34px_rgba(239,68,68,0.2)]"
-          />
-          <img
-            src={backLaptop}
-            alt={t('home.heroBackAlt')}
-            className="floating-laptop-front absolute bottom-[1%] inset-s-0 z-20 h-auto w-[76%] object-contain drop-shadow-[0_28px_38px_rgba(245,158,11,0.3)]"
-          />
+        <div className="relative z-10 flex h-full w-full items-center justify-center">
+          {/* Premium garment showcase panel / لوحة عرض الملابس المميزة */}
+          <div className="relative flex aspect-square w-[74%] flex-col items-center justify-center gap-6 rounded-[2rem] border border-white/10 bg-linear-to-b from-white/5 to-transparent px-8 text-center shadow-2xl shadow-black/50">
+            <img
+              src="/ninja-wear-logo.png"
+              alt={t('home.heroFrontAlt')}
+              className="h-2/5 w-auto object-contain drop-shadow-[0_28px_38px_rgba(245,158,11,0.3)]"
+            />
+            <div className="space-y-2">
+              <p className="text-2xl font-black uppercase tracking-[0.2em] text-white">NINJA WEAR</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">{t('footer.tagline')}</p>
+            </div>
+          </div>
         </div>
       </m.div>
     </div>
